@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ArrowLeft, Send, Phone, Video, MoreVertical, Search, Star, Image as ImageIcon } from "lucide-react"
+import { ArrowLeft, Send, Phone, Video, MoreVertical, Search, Star, Image as ImageIcon, Bot } from "lucide-react"
 import Link from "next/link"
 import { supabase } from "@/lib/supabaseClient"
 
@@ -309,6 +309,35 @@ export default function ChatPage() {
 
       {/* Chat List */}
       <div className="p-4 space-y-3">
+        {/* AI Assistant Card */}
+        <Link href="/ai-assistant">
+          <Card className="cursor-pointer hover:shadow-md transition-shadow bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <Avatar className="h-12 w-12 bg-primary">
+                  <AvatarFallback>
+                    <Bot className="h-6 w-6 text-primary-foreground" />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-primary">AI Assistant</h3>
+                      <Badge variant="secondary" className="text-xs bg-primary/20 text-primary border-primary/20">
+                        Smart AI
+                      </Badge>
+                    </div>
+                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                  </div>
+                  <p className="text-sm text-muted-foreground truncate">
+                    Get instant farming advice, market insights, and crop recommendations
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
+        
         {filteredChats.map((chat) => (
           <Card
             key={chat.id}
