@@ -1,29 +1,43 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ArrowLeft, Send, Bot, TrendingUp, Cloud, Bug, Sprout } from "lucide-react"
 import Link from "next/link"
+import { useTranslations } from "@/hooks/useTranslations"
+import { RecordButton } from "@/components/RecordButton"
 
 export default function AIAssistantPage() {
+  const { t, lang } = useTranslations()
   const [message, setMessage] = useState("")
   const [messages, setMessages] = useState([
     {
       id: 1,
       type: "ai",
-      content:
-        "Hello! I'm your AI farming assistant. I can help you with crop recommendations, pest management, weather insights, and market analysis. What would you like to know?",
+      content: "",
       time: "Just now",
     },
   ])
 
+  // Keep the first AI welcome message in sync with current language
+  useEffect(() => {
+    setMessages((prev) => {
+      if (prev.length === 0) return prev
+      const updated = [...prev]
+      if (updated[0].type === "ai") {
+        updated[0] = { ...updated[0], content: t.aiWelcome }
+      }
+      return updated
+    })
+  }, [lang, t.aiWelcome])
+
   const quickActions = [
-    { icon: Sprout, label: "Crop Recommendations", query: "What crops should I plant this season?" },
-    { icon: Bug, label: "Pest Control", query: "How do I identify and treat common pests?" },
-    { icon: Cloud, label: "Weather Insights", query: "How will weather affect my crops this week?" },
-    { icon: TrendingUp, label: "Market Analysis", query: "What are the best crops to sell right now?" },
+    { icon: Sprout, label: t.aiQuickCrop, query: "What crops should I plant this season?" },
+    { icon: Bug, label: t.aiQuickPest, query: "How do I identify and treat common pests?" },
+    { icon: Cloud, label: t.aiQuickWeather, query: "How will weather affect my crops this week?" },
+    { icon: TrendingUp, label: t.aiQuickMarket, query: "What are the best crops to sell right now?" },
   ]
 
   const handleSendMessage = async () => {
@@ -156,8 +170,8 @@ export default function AIAssistantPage() {
               </AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="text-lg font-semibold">AI Assistant</h1>
-              <p className="text-sm text-muted-foreground">Smart farming guidance</p>
+              <h1 className="text-lg font-semibold">{t.aiAssistant}</h1>
+              <p className="text-sm text-muted-foreground">{t.aiSubtitle}</p>
             </div>
           </div>
         </div>
@@ -211,11 +225,15 @@ export default function AIAssistantPage() {
       <div className="safe-area-bottom bg-card border-t border-border p-4">
         <div className="flex gap-2">
           <Input
-            placeholder="Ask me anything about farming..."
+            placeholder={t.aiInputPlaceholder}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
             className="flex-1"
+          />
+          <RecordButton
+            onTranscript={(text) => setMessage(text)}
+            size="sm"
           />
           <Button onClick={handleSendMessage} disabled={!message.trim()}>
             <Send className="h-4 w-4" />

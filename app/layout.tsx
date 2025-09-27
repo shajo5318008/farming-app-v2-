@@ -2,6 +2,8 @@ import type React from "react"
 import type { Metadata, Viewport } from "next"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { GlobalLanguageButton } from "@/components/GlobalLanguageButton"
+import { GlobalReadControls } from "@/components/GlobalReadControls"
 
 export const metadata: Metadata = {
   title: "FarmConnect - Farmer Marketplace",
@@ -45,6 +47,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          {/* Non-functional language button on all pages except Home */}
+          <GlobalLanguageButton />
+          {/* Text-to-Speech controls available on all pages */}
+          <GlobalReadControls />
           {children}
         </ThemeProvider>
       </body>

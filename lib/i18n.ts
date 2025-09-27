@@ -36,6 +36,27 @@ export interface Translations {
   marketPrices: string
   findBuyers: string
   costCalculator: string
+  // Home feature descriptions
+  featureMarketDesc: string
+  featureBuyersDesc: string
+  featureCalculatorDesc: string
+  featureAIDesc: string
+
+  // AI Assistant page
+  aiSubtitle: string
+  aiWelcome: string
+  aiInputPlaceholder: string
+  aiQuickCrop: string
+  aiQuickPest: string
+  aiQuickWeather: string
+  aiQuickMarket: string
+
+  // Chat page
+  messagesTitle: string
+  messagesSubtitle: string
+  searchConversationsPlaceholder: string
+  noConversations: string
+  clearSearch: string
 
   // Auth
   phoneNumber: string
@@ -92,6 +113,28 @@ const translations: Record<Language, Translations> = {
     marketPrices: "Market Prices",
     findBuyers: "Find Buyers",
     costCalculator: "Cost Calculator",
+    // Home feature descriptions
+    featureMarketDesc: "Real-time pricing from nearby markets",
+    featureBuyersDesc: "Connect with verified buyers",
+    featureCalculatorDesc: "Transport & logistics planning",
+    featureAIDesc: "Smart farming recommendations",
+
+    // AI Assistant page
+    aiSubtitle: "Smart farming guidance",
+    aiWelcome:
+      "Hello! I'm your AI farming assistant. I can help you with crop recommendations, pest management, weather insights, and market analysis. What would you like to know?",
+    aiInputPlaceholder: "Ask me anything about farming...",
+    aiQuickCrop: "Crop Recommendations",
+    aiQuickPest: "Pest Control",
+    aiQuickWeather: "Weather Insights",
+    aiQuickMarket: "Market Analysis",
+
+    // Chat page
+    messagesTitle: "Messages",
+    messagesSubtitle: "Connect with buyers and farmers",
+    searchConversationsPlaceholder: "Search conversations...",
+    noConversations: "No conversations found",
+    clearSearch: "Clear Search",
 
     // Auth
     phoneNumber: "Phone Number",
@@ -146,6 +189,28 @@ const translations: Record<Language, Translations> = {
     marketPrices: "बाज़ार की कीमतें",
     findBuyers: "खरीदार खोजें",
     costCalculator: "लागत कैलकुलेटर",
+    // Home feature descriptions
+    featureMarketDesc: "नज़दीकी मंडियों की रियल-टाइम कीमतें",
+    featureBuyersDesc: "प्रमाणित खरीदारों से जुड़ें",
+    featureCalculatorDesc: "परिवहन और लॉजिस्टिक्स योजना",
+    featureAIDesc: "स्मार्ट खेती सुझाव",
+
+    // AI Assistant page
+    aiSubtitle: "स्मार्ट खेती मार्गदर्शन",
+    aiWelcome:
+      "नमस्ते! मैं आपका AI खेती सहायक हूँ। मैं फसल सुझाव, कीट प्रबंधन, मौसम जानकारी और बाज़ार विश्लेषण में आपकी मदद कर सकता हूँ। आप क्या जानना चाहते हैं?",
+    aiInputPlaceholder: "खेती के बारे में कुछ भी पूछें...",
+    aiQuickCrop: "फसल सुझाव",
+    aiQuickPest: "कीट नियंत्रण",
+    aiQuickWeather: "मौसम जानकारी",
+    aiQuickMarket: "बाज़ार विश्लेषण",
+
+    // Chat page
+    messagesTitle: "संदेश",
+    messagesSubtitle: "खरीदारों और किसानों से जुड़ें",
+    searchConversationsPlaceholder: "बातचीत खोजें...",
+    noConversations: "कोई बातचीत नहीं मिली",
+    clearSearch: "खोज साफ़ करें",
 
     // Auth
     phoneNumber: "फोन नंबर",
@@ -186,6 +251,13 @@ export function getCurrentLanguage(): Language {
 export function setLanguage(language: Language) {
   if (typeof window !== "undefined") {
     localStorage.setItem("farmconnect-language", language)
-    window.location.reload() // Simple reload for now
+    // Notify listeners without forcing a full reload
+    try {
+      window.dispatchEvent(new Event("fc-language-change"))
+      // Also emit a synthetic storage event for components relying on it
+      window.dispatchEvent(new StorageEvent("storage", { key: "farmconnect-language", newValue: language }))
+    } catch {
+      // no-op: some environments may restrict constructing StorageEvent
+    }
   }
 }

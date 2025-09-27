@@ -112,7 +112,12 @@ export default function DashboardPage() {
               <Wheat className="h-6 w-6 text-primary" />
               <span className="font-semibold">FarmConnect</span>
             </div>
-            <Button variant="ghost" size="sm">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="mr-12 md:mr-16 relative z-0"
+              aria-label="Notifications"
+            >
               <Bell className="h-5 w-5" />
             </Button>
           </div>

@@ -9,8 +9,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ArrowLeft, Send, Phone, Video, MoreVertical, Search, Star, Image as ImageIcon, Bot } from "lucide-react"
 import Link from "next/link"
 import { supabase } from "@/lib/supabaseClient"
+import { useTranslations } from "@/hooks/useTranslations"
+import { RecordButton } from "@/components/RecordButton"
 
 export default function ChatPage() {
+  const { t } = useTranslations()
   const [selectedChat, setSelectedChat] = useState<number | null>(null)
   const [message, setMessage] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
@@ -290,19 +293,25 @@ export default function ChatPage() {
             </Button>
           </Link>
           <div>
-            <h1 className="text-lg font-semibold">Messages</h1>
-            <p className="text-sm text-muted-foreground">Connect with buyers and farmers</p>
+            <h1 className="text-lg font-semibold">{t.messagesTitle}</h1>
+            <p className="text-sm text-muted-foreground">{t.messagesSubtitle}</p>
           </div>
         </div>
 
         {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search conversations..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+        <div className="relative flex gap-2">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder={t.searchConversationsPlaceholder}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          <RecordButton
+            onTranscript={(text) => setSearchQuery(text)}
+            size="sm"
           />
         </div>
       </header>
@@ -329,9 +338,7 @@ export default function ChatPage() {
                     </div>
                     <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                   </div>
-                  <p className="text-sm text-muted-foreground truncate">
-                    Get instant farming advice, market insights, and crop recommendations
-                  </p>
+                  <p className="text-sm text-muted-foreground truncate">{t.featureAIDesc}</p>
                 </div>
               </div>
             </CardContent>
@@ -388,9 +395,9 @@ export default function ChatPage() {
         {filteredChats.length === 0 && (
           <Card>
             <CardContent className="p-8 text-center">
-              <p className="text-muted-foreground">No conversations found</p>
+              <p className="text-muted-foreground">{t.noConversations}</p>
               <Button variant="outline" className="mt-4 bg-transparent" onClick={() => setSearchQuery("")}>
-                Clear Search
+                {t.clearSearch}
               </Button>
             </CardContent>
           </Card>

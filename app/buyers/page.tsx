@@ -11,8 +11,8 @@ import { ArrowLeft, Search, Phone, MessageCircle, MapPin, Star, Filter } from "l
 import Link from "next/link"
 import dynamic from "next/dynamic"
 
-const BuyersMap = dynamic(() => import("./buyersMap"), { ssr: false })
 
+const BuyersMap = dynamic(() => import("./buyersMap"), { ssr: false })
 export default function BuyersPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [filterType, setFilterType] = useState("all")

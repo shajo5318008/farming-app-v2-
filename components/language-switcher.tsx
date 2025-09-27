@@ -1,31 +1,35 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Languages } from "lucide-react"
 import { getCurrentLanguage, setLanguage, type Language } from "@/lib/i18n"
 
+// Simple, reliable toggle (EN <-> हिंदी) without dropdowns
 export function LanguageSwitcher() {
-  const [currentLang, setCurrentLang] = useState<Language>(getCurrentLanguage())
+  // Render 'en' on server/first paint to avoid hydration mismatches, then sync after mount
+  const [currentLang, setCurrentLang] = useState<Language>('en')
 
-  const handleLanguageChange = (lang: Language) => {
-    setLanguage(lang)
-    setCurrentLang(lang)
-  }
+  useEffect(() => {
+    setCurrentLang(getCurrentLanguage())
+  }, [])
+
+  const toggleLang = useCallback(() => {
+    const next = currentLang === "hi" ? "en" : "hi"
+    setLanguage(next)
+    setCurrentLang(next)
+  }, [currentLang])
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-2">
-          <Languages className="h-4 w-4" />
-          {currentLang === "hi" ? "हिं" : "EN"}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => handleLanguageChange("en")}>English</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleLanguageChange("hi")}>हिंदी</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Button
+      variant="ghost"
+      size="sm"
+      className="gap-2"
+      onClick={toggleLang}
+      title={currentLang === "hi" ? "Switch to English" : "हिंदी पर स्विच करें"}
+    >
+      <Languages className="h-4 w-4" />
+      <span suppressHydrationWarning>{currentLang === "hi" ? "हिंदी" : "EN"}</span>
+    </Button>
   )
 }
